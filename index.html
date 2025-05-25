@@ -1,133 +1,237 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>B1llyGr4c3 W3b</title>
-  <link rel="icon" href="ChatGPT Image 20 abr 2025, 14_57_52.png" type="image/png">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Barra superior */
-    .navbar {
-      display: flex;
-      justify-content: space-between; /* títol a l'esquerra, menú a la dreta */
-      align-items: center;
-      background-color: #333;
-      padding: 10px 20px;
-      position: relative;
-    }
-
-    .navbar h1 {
-      color: white;
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .menu-icon {
-      font-size: 28px;
-      color: white;
-      cursor: pointer;
-    }
-
-    /* Clock styling */
-    #clock {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    /* Menú desplegable */
-    .menu {
-      display: none;
-      flex-direction: column;
-      background-color: #444;
-      position: absolute;
-      top: 60px;
-      right: 20px;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    .menu a {
-      color: white;
-      text-decoration: none;
-      margin: 5px 0;
-      font-size: 16px;
-    }
-
-    .menu a:hover {
-      text-decoration: underline;
-    }
-
-    /* Contingut */
-    .content {
-      padding: 0px;
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema con Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        /* Estilos para el login */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .login-form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .login-form button:hover {
+            background-color: #45a049;
+        }
+        
+        /* Estilos para la pantalla principal */
+        .main-container {
+            display: none;
+        }
+        
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        nav {
+            background-color: #444;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        
+        nav ul li {
+            padding: 15px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        nav ul li:hover {
+            background-color: #555;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .logout-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
-
-  <!-- Barra amb menú -->
-  <div class="navbar">
-    <h1>BillyGrace Web!</h1>
-    <div id="clock"></div>
-    <div class="menu-icon" onclick="toggleMenu()">☰</div>
-  </div>
-
-  <!-- Menú desplegable -->
-  <div class="menu" id="menu">
-    <a href="fitxers.html">Fitxers</a>
-    <a href="lectura.html">Lectura</a>
-  </div>
-
-  <!-- Contingut principal -->
-  <div class="content">
-    <h1>BillyGrace Web!</h1>
-    <h2>This seems to work!</h2>
-    <p><u>Only trying to do a wesite</u></p>
+    <!-- Contenedor del formulario de login -->
+    <div class="login-container" id="loginContainer">
+        <form class="login-form" id="loginForm">
+            <h2>Iniciar Sesión</h2>
+            <input type="text" id="username" placeholder="Usuario" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
     
-  </div>
-
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-    }
-
-    // Tancar el menú si es fa clic fora
-    document.addEventListener('click', function(event) {
-      const menu = document.getElementById("menu");
-      const icon = document.querySelector(".menu-icon");
-      if (!menu.contains(event.target) && !icon.contains(event.target)) {
-        menu.style.display = "none";
-      }
-    });
-    
-    function updateClock() {
-        const now = new Date();
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        const seconds = now.getSeconds().toString().padStart(2, '0');
+    <!-- Contenedor principal (visible después del login) -->
+    <div class="main-container" id="mainContainer">
+        <header>
+            <h1>Mi Aplicación</h1>
+            <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+        </header>
         
-        document.getElementById('clock').textContent = 
-            `${hours}:${minutes}:${seconds}`;
-    }
-
-    // Update the clock immediately and then every second
-    updateClock();
-    setInterval(updateClock, 1000);
-  </script>
-
+        <nav>
+            <ul>
+                <li><a href="#" id="homeLink">Inicio</a></li>
+                <li><a href="#" id="page1Link">Página 1</a></li>
+                <li><a href="#" id="page2Link">Página 2</a></li>
+                <li><a href="#" id="page3Link">Página 3</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content" id="contentArea">
+            <h2>Bienvenido a la página principal</h2>
+            <p>Selecciona una opción del menú para navegar por las diferentes secciones.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Credenciales válidas (en un caso real, esto estaría en el servidor)
+        const validCredentials = {
+            username: "admin",
+            password: "1234"
+        };
+        
+        // Elementos del DOM
+        const loginContainer = document.getElementById('loginContainer');
+        const mainContainer = document.getElementById('mainContainer');
+        const loginForm = document.getElementById('loginForm');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const contentArea = document.getElementById('contentArea');
+        
+        // Enlaces del menú
+        const homeLink = document.getElementById('homeLink');
+        const page1Link = document.getElementById('page1Link');
+        const page2Link = document.getElementById('page2Link');
+        const page3Link = document.getElementById('page3Link');
+        
+        // Manejar el envío del formulario de login
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Validar credenciales (simulado)
+            if (username === validCredentials.username && password === validCredentials.password) {
+                // Credenciales correctas, mostrar pantalla principal
+                loginContainer.style.display = 'none';
+                mainContainer.style.display = 'block';
+            } else {
+                alert('Usuario o contraseña incorrectos');
+            }
+        });
+        
+        // Manejar el cierre de sesión
+        logoutBtn.addEventListener('click', function() {
+            mainContainer.style.display = 'none';
+            loginContainer.style.display = 'flex';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showHomeContent();
+        });
+        
+        // Funciones para mostrar diferentes contenidos
+        function showHomeContent() {
+            contentArea.innerHTML = `
+                <h2>Bienvenido a la página principal</h2>
+                <p>Selecciona una opción del menú para navegar por las diferentes secciones.</p>
+            `;
+        }
+        
+        function showPage1Content() {
+            contentArea.innerHTML = `
+                <h2>Página 1</h2>
+                <p>Este es el contenido de la página 1.</p>
+                <p>Puedes añadir aquí cualquier elemento HTML que necesites.</p>
+            `;
+        }
+        
+        function showPage2Content() {
+            contentArea.innerHTML = `
+                <h2>Página 2</h2>
+                <p>Este es el contenido de la página 2.</p>
+                <ul>
+                    <li>Elemento 1</li>
+                    <li>Elemento 2</li>
+                    <li>Elemento 3</li>
+                </ul>
+            `;
+        }
+        
+        function showPage3Content() {
+            contentArea.innerHTML = `
+                <h2>Página 3</h2>
+                <p>Este es el contenido de la página 3.</p>
+                <p>Puedes personalizar cada página según tus necesidades.</p>
+            `;
+        }
+        
+        // Event listeners para los enlaces del menú
+        homeLink.addEventListener('click', showHomeContent);
+        page1Link.addEventListener('click', showPage1Content);
+        page2Link.addEventListener('click', showPage2Content);
+        page3Link.addEventListener('click', showPage3Content);
+    </script>
 </body>
 </html>
