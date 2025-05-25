@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema con Login</title>
+    <title>Aplicación Completa</title>
     <style>
+        /* Estilos generales */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
+            color: #333;
         }
         
         /* Estilos para el login */
@@ -18,60 +20,103 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
         }
         
         .login-form {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .login-form h2 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            color: #444;
         }
         
         .login-form input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 5px;
             box-sizing: border-box;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .login-form input:focus {
+            border-color: #6e8efb;
+            outline: none;
         }
         
         .login-form button {
             width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
+            padding: 12px;
+            background: linear-gradient(to right, #6e8efb, #a777e3);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s;
         }
         
         .login-form button:hover {
-            background-color: #45a049;
+            background: linear-gradient(to right, #5a7df4, #9866d8);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
         /* Estilos para la pantalla principal */
         .main-container {
             display: none;
+            min-height: 100vh;
         }
         
         header {
-            background-color: #333;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
             color: white;
-            padding: 10px 20px;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logout-btn {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #ff6b81;
         }
         
         nav {
             background-color: #444;
+            padding: 0 30px;
         }
         
         nav ul {
@@ -88,27 +133,391 @@
         nav ul li a {
             color: white;
             text-decoration: none;
+            font-weight: 500;
         }
         
         nav ul li:hover {
             background-color: #555;
         }
         
-        .content {
+        nav ul li.active {
+            background-color: #666;
+        }
+        
+        /* Contenedor de páginas */
+        .page-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: none;
+        }
+        
+        .page-container.active {
+            display: block;
+        }
+        
+        /* Estilos comunes para controles */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .search-box {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            max-width: 400px;
+        }
+        
+        .action-btn {
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: linear-gradient(to right, #5a7df4, #9866d8);
+        }
+        
+        /* Estilos específicos para notas */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .note-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .note-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #444;
+        }
+        
+        .note-content {
+            color: #666;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+        }
+        
+        .note-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+        
+        .note-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .edit-btn, .delete-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .edit-btn {
+            background-color: #ffa502;
+            color: white;
+        }
+        
+        .edit-btn:hover {
+            background-color: #ffb732;
+        }
+        
+        .delete-btn {
+            background-color: #ff4757;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background-color: #ff6b81;
+        }
+        
+        /* Estilos específicos para PDFs */
+        .pdf-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .pdf-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .pdf-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .pdf-icon {
+            font-size: 50px;
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .pdf-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .pdf-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+        
+        .pdf-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .view-btn, .delete-pdf-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .view-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .delete-pdf-btn {
+            background-color: #ff4757;
+            color: white;
+        }
+        
+        .delete-pdf-btn:hover {
+            background-color: #ff6b81;
+        }
+        
+        /* Modales */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .modal-textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .save-btn, .cancel-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .save-btn {
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background: linear-gradient(to right, #5a7df4, #9866d8);
+        }
+        
+        .cancel-btn {
+            background-color: #f1f2f6;
+            color: #666;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #dfe4ea;
+        }
+        
+        /* Modal PDF */
+        .pdf-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .pdf-modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            height: 90%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pdf-modal-header {
+            padding: 15px;
+            background: #f1f2f6;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pdf-modal-title {
+            font-weight: bold;
+        }
+        
+        .close-pdf-modal {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .pdf-viewer-container {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        
+        .pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Input file oculto */
+        .file-input {
+            display: none;
+        }
+        
+        /* Mensajes vacíos */
+        .empty-message {
+            grid-column: 1/-1;
+            text-align: center;
+            color: #666;
             padding: 20px;
         }
         
-        .logout-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .logout-btn:hover {
-            background-color: #d32f2f;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .notes-grid, .pdf-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                padding: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -126,27 +535,84 @@
     <!-- Contenedor principal (visible después del login) -->
     <div class="main-container" id="mainContainer">
         <header>
-            <h1>Mi Aplicación</h1>
+            <div class="header-title">Aplicación Completa</div>
             <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
         </header>
         
         <nav>
             <ul>
-                <li><a href="#" id="homeLink">Inicio</a></li>
-                <li><a href="#" id="page1Link">Página 1</a></li>
-                <li><a href="#" id="page2Link">Página 2</a></li>
-                <li><a href="#" id="page3Link">Página 3</a></li>
+                <li><a href="#" class="nav-link" data-page="home">Inicio</a></li>
+                <li><a href="#" class="nav-link" data-page="notes">Notas</a></li>
+                <li><a href="#" class="nav-link" data-page="pdfs">PDFs</a></li>
             </ul>
         </nav>
         
-        <div class="content" id="contentArea">
-            <h2>Bienvenido a la página principal</h2>
-            <p>Selecciona una opción del menú para navegar por las diferentes secciones.</p>
+        <!-- Página de Inicio -->
+        <div class="page-container" id="homePage">
+            <div class="welcome-message">
+                <h2>Bienvenido a la aplicación</h2>
+                <p>Selecciona una opción del menú para acceder a las diferentes secciones:</p>
+                <ul>
+                    <li><strong>Notas:</strong> Crea y gestiona tus notas personales</li>
+                    <li><strong>PDFs:</strong> Sube y administra tus documentos PDF</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Página de Notas -->
+        <div class="page-container" id="notesPage">
+            <div class="controls">
+                <input type="text" class="search-box" id="notesSearchBox" placeholder="Buscar notas...">
+                <button class="action-btn" id="addNoteBtn">+ Nueva Nota</button>
+            </div>
+            
+            <div class="notes-grid" id="notesGrid">
+                <div class="empty-message">No hay notas disponibles. Haz clic en "Nueva Nota" para añadir una.</div>
+            </div>
+        </div>
+        
+        <!-- Página de PDFs -->
+        <div class="page-container" id="pdfsPage">
+            <div class="controls">
+                <input type="text" class="search-box" id="pdfSearchBox" placeholder="Buscar PDFs...">
+                <button class="action-btn" id="uploadPdfBtn">Subir PDF</button>
+                <input type="file" class="file-input" id="pdfFileInput" accept=".pdf">
+            </div>
+            
+            <div class="pdf-list" id="pdfList">
+                <div class="empty-message">No hay PDFs disponibles. Haz clic en "Subir PDF" para añadir uno.</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para notas -->
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="modalTitle">Nueva Nota</h2>
+            <input type="text" class="modal-input" id="noteTitle" placeholder="Título de la nota">
+            <textarea class="modal-textarea" id="noteContent" placeholder="Contenido de la nota..."></textarea>
+            <div class="modal-actions">
+                <button class="cancel-btn" id="cancelNoteBtn">Cancelar</button>
+                <button class="save-btn" id="saveNoteBtn">Guardar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para visualización de PDF -->
+    <div class="pdf-modal" id="pdfModal">
+        <div class="pdf-modal-content">
+            <div class="pdf-modal-header">
+                <div class="pdf-modal-title" id="pdfModalTitle">Visualizador de PDF</div>
+                <button class="close-pdf-modal" id="closePdfModal">&times;</button>
+            </div>
+            <div class="pdf-viewer-container">
+                <iframe class="pdf-viewer" id="pdfViewer" frameborder="0"></iframe>
+            </div>
         </div>
     </div>
     
     <script>
-        // Credenciales válidas (en un caso real, esto estaría en el servidor)
+        // Credenciales válidas
         const validCredentials = {
             username: "admin",
             password: "1234"
@@ -157,13 +623,52 @@
         const mainContainer = document.getElementById('mainContainer');
         const loginForm = document.getElementById('loginForm');
         const logoutBtn = document.getElementById('logoutBtn');
-        const contentArea = document.getElementById('contentArea');
         
-        // Enlaces del menú
-        const homeLink = document.getElementById('homeLink');
-        const page1Link = document.getElementById('page1Link');
-        const page2Link = document.getElementById('page2Link');
-        const page3Link = document.getElementById('page3Link');
+        // Elementos de navegación
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = {
+            home: document.getElementById('homePage'),
+            notes: document.getElementById('notesPage'),
+            pdfs: document.getElementById('pdfsPage')
+        };
+        
+        // Elementos de notas
+        const notesGrid = document.getElementById('notesGrid');
+        const addNoteBtn = document.getElementById('addNoteBtn');
+        const notesSearchBox = document.getElementById('notesSearchBox');
+        const noteModal = document.getElementById('noteModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const noteTitle = document.getElementById('noteTitle');
+        const noteContent = document.getElementById('noteContent');
+        const saveNoteBtn = document.getElementById('saveNoteBtn');
+        const cancelNoteBtn = document.getElementById('cancelNoteBtn');
+        
+        // Elementos de PDFs
+        const pdfList = document.getElementById('pdfList');
+        const uploadPdfBtn = document.getElementById('uploadPdfBtn');
+        const pdfFileInput = document.getElementById('pdfFileInput');
+        const pdfSearchBox = document.getElementById('pdfSearchBox');
+        const pdfModal = document.getElementById('pdfModal');
+        const pdfViewer = document.getElementById('pdfViewer');
+        const pdfModalTitle = document.getElementById('pdfModalTitle');
+        const closePdfModal = document.getElementById('closePdfModal');
+        
+        // Variables de estado
+        let notes = JSON.parse(localStorage.getItem('notes')) || [];
+        let pdfs = JSON.parse(localStorage.getItem('pdfs')) || [];
+        let currentNoteId = null;
+        let isEditingNote = false;
+        let currentPage = 'home';
+        
+        // Inicialización
+        function init() {
+            // Mostrar página actual
+            showPage(currentPage);
+            
+            // Renderizar datos iniciales
+            renderNotes();
+            renderPdfs();
+        }
         
         // Manejar el envío del formulario de login
         loginForm.addEventListener('submit', function(e) {
@@ -172,11 +677,10 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            // Validar credenciales (simulado)
             if (username === validCredentials.username && password === validCredentials.password) {
-                // Credenciales correctas, mostrar pantalla principal
                 loginContainer.style.display = 'none';
                 mainContainer.style.display = 'block';
+                init();
             } else {
                 alert('Usuario o contraseña incorrectos');
             }
@@ -188,50 +692,288 @@
             loginContainer.style.display = 'flex';
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
-            showHomeContent();
         });
         
-        // Funciones para mostrar diferentes contenidos
-        function showHomeContent() {
-            contentArea.innerHTML = `
-                <h2>Bienvenido a la página principal</h2>
-                <p>Selecciona una opción del menú para navegar por las diferentes secciones.</p>
-            `;
+        // Navegación entre páginas
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                const page = this.dataset.page;
+                showPage(page);
+            });
+        });
+        
+        function showPage(page) {
+            // Ocultar todas las páginas
+            Object.values(pages).forEach(p => p.classList.remove('active'));
+            
+            // Desactivar todos los enlaces de navegación
+            navLinks.forEach(link => {
+                link.parentElement.classList.remove('active');
+            });
+            
+            // Mostrar la página seleccionada
+            pages[page].classList.add('active');
+            
+            // Activar el enlace de navegación correspondiente
+            document.querySelector(`.nav-link[data-page="${page}"]`).parentElement.classList.add('active');
+            
+            currentPage = page;
         }
         
-        function showPage1Content() {
-            contentArea.innerHTML = `
-                <h2>Página 1</h2>
-                <p>Este es el contenido de la página 1.</p>
-                <p>Puedes añadir aquí cualquier elemento HTML que necesites.</p>
-            `;
+        // ======================
+        // Gestión de Notas
+        // ======================
+        addNoteBtn.addEventListener('click', function() {
+            isEditingNote = false;
+            currentNoteId = null;
+            noteTitle.value = '';
+            noteContent.value = '';
+            modalTitle.textContent = 'Nueva Nota';
+            noteModal.style.display = 'flex';
+        });
+        
+        saveNoteBtn.addEventListener('click', saveNote);
+        cancelNoteBtn.addEventListener('click', closeNoteModal);
+        noteModal.addEventListener('click', function(e) {
+            if (e.target === noteModal) {
+                closeNoteModal();
+            }
+        });
+        
+        notesSearchBox.addEventListener('input', renderNotes);
+        
+        function saveNote() {
+            const title = noteTitle.value.trim();
+            const content = noteContent.value.trim();
+            
+            if (!title || !content) {
+                alert('Por favor, completa tanto el título como el contenido');
+                return;
+            }
+            
+            if (isEditingNote) {
+                // Editar nota existente
+                const noteIndex = notes.findIndex(note => note.id === currentNoteId);
+                if (noteIndex !== -1) {
+                    notes[noteIndex] = {
+                        ...notes[noteIndex],
+                        title,
+                        content,
+                        updatedAt: new Date().toISOString()
+                    };
+                }
+            } else {
+                // Añadir nueva nota
+                const newNote = {
+                    id: Date.now().toString(),
+                    title,
+                    content,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                notes.unshift(newNote);
+            }
+            
+            saveNotes();
+            renderNotes();
+            closeNoteModal();
         }
         
-        function showPage2Content() {
-            contentArea.innerHTML = `
-                <h2>Página 2</h2>
-                <p>Este es el contenido de la página 2.</p>
-                <ul>
-                    <li>Elemento 1</li>
-                    <li>Elemento 2</li>
-                    <li>Elemento 3</li>
-                </ul>
-            `;
+        function renderNotes() {
+            const searchTerm = notesSearchBox.value.toLowerCase();
+            const filteredNotes = notes.filter(note => 
+                note.title.toLowerCase().includes(searchTerm) || 
+                note.content.toLowerCase().includes(searchTerm))
+            .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+            
+            notesGrid.innerHTML = '';
+            
+            if (filteredNotes.length === 0) {
+                notesGrid.innerHTML = '<div class="empty-message">No hay notas disponibles</div>';
+                return;
+            }
+            
+            filteredNotes.forEach(note => {
+                const noteCard = document.createElement('div');
+                noteCard.className = 'note-card';
+                noteCard.innerHTML = `
+                    <div class="note-title">${note.title}</div>
+                    <div class="note-content">${note.content}</div>
+                    <div class="note-date">${formatDate(note.updatedAt)}</div>
+                    <div class="note-actions">
+                        <button class="edit-btn" data-id="${note.id}">Editar</button>
+                        <button class="delete-btn" data-id="${note.id}">Eliminar</button>
+                    </div>
+                `;
+                notesGrid.appendChild(noteCard);
+            });
+            
+            // Añadir event listeners a los botones
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    editNote(this.dataset.id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    deleteNote(this.dataset.id);
+                });
+            });
         }
         
-        function showPage3Content() {
-            contentArea.innerHTML = `
-                <h2>Página 3</h2>
-                <p>Este es el contenido de la página 3.</p>
-                <p>Puedes personalizar cada página según tus necesidades.</p>
-            `;
+        function editNote(id) {
+            const note = notes.find(note => note.id === id);
+            if (note) {
+                isEditingNote = true;
+                currentNoteId = id;
+                noteTitle.value = note.title;
+                noteContent.value = note.content;
+                modalTitle.textContent = 'Editar Nota';
+                noteModal.style.display = 'flex';
+            }
         }
         
-        // Event listeners para los enlaces del menú
-        homeLink.addEventListener('click', showHomeContent);
-        page1Link.addEventListener('click', showPage1Content);
-        page2Link.addEventListener('click', showPage2Content);
-        page3Link.addEventListener('click', showPage3Content);
+        function deleteNote(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta nota?')) {
+                notes = notes.filter(note => note.id !== id);
+                saveNotes();
+                renderNotes();
+            }
+        }
+        
+        function closeNoteModal() {
+            noteModal.style.display = 'none';
+        }
+        
+        function saveNotes() {
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+        
+        // ======================
+        // Gestión de PDFs
+        // ======================
+        uploadPdfBtn.addEventListener('click', function() {
+            pdfFileInput.click();
+        });
+        
+        pdfFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                uploadPdf(file);
+            } else {
+                alert('Por favor, selecciona un archivo PDF válido');
+            }
+        });
+        
+        pdfSearchBox.addEventListener('input', renderPdfs);
+        closePdfModal.addEventListener('click', function() {
+            pdfModal.style.display = 'none';
+            pdfViewer.src = '';
+        });
+        
+        function uploadPdf(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const pdfData = {
+                    id: Date.now().toString(),
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    uploadDate: new Date().toISOString(),
+                    data: e.target.result.split(',')[1] // Guardamos solo la parte base64
+                };
+                
+                pdfs.unshift(pdfData);
+                savePdfs();
+                renderPdfs();
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        function renderPdfs() {
+            const searchTerm = pdfSearchBox.value.toLowerCase();
+            const filteredPdfs = pdfs.filter(pdf => 
+                pdf.name.toLowerCase().includes(searchTerm))
+            .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            
+            pdfList.innerHTML = '';
+            
+            if (filteredPdfs.length === 0) {
+                pdfList.innerHTML = '<div class="empty-message">No hay PDFs disponibles</div>';
+                return;
+            }
+            
+            filteredPdfs.forEach(pdf => {
+                const pdfCard = document.createElement('div');
+                pdfCard.className = 'pdf-card';
+                pdfCard.innerHTML = `
+                    <div class="pdf-icon">📄</div>
+                    <div class="pdf-name" title="${pdf.name}">${pdf.name}</div>
+                    <div class="pdf-date">Subido: ${formatDate(pdf.uploadDate)} • ${pdf.size}</div>
+                    <div class="pdf-actions">
+                        <button class="view-btn" data-id="${pdf.id}">Ver</button>
+                        <button class="delete-pdf-btn" data-id="${pdf.id}">Eliminar</button>
+                    </div>
+                `;
+                pdfList.appendChild(pdfCard);
+            });
+            
+            // Añadir event listeners a los botones
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    viewPdf(this.dataset.id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-pdf-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    deletePdf(this.dataset.id);
+                });
+            });
+        }
+        
+        function viewPdf(id) {
+            const pdf = pdfs.find(pdf => pdf.id === id);
+            if (pdf) {
+                pdfModalTitle.textContent = pdf.name;
+                pdfViewer.src = `data:application/pdf;base64,${pdf.data}`;
+                pdfModal.style.display = 'flex';
+            }
+        }
+        
+        function deletePdf(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este PDF?')) {
+                pdfs = pdfs.filter(pdf => pdf.id !== id);
+                savePdfs();
+                renderPdfs();
+            }
+        }
+        
+        function savePdfs() {
+            localStorage.setItem('pdfs', JSON.stringify(pdfs));
+        }
+        
+        // Funciones auxiliares
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
     </script>
 </body>
 </html>
